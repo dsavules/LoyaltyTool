@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LoyaltyTool</title>
+    <script src="main.js"></script>
+    <script src="functions.js"></script>    
+    <script src="treant-js-master/vendor/jquery.min.js"></script>
+    <script src="treant-js-master/vendor/jquery.easing.js"></script>
+    <script src="treant-js-master/vendor/raphael.js"></script>
+    <script src="treant-js-master/Treant.js"></script>
+
+    <link rel="stylesheet" href="treant-js-master/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="treant-js-master/Treant.css">
+    <link rel="stylesheet" href="css.css">
+    <script src="collapsable.js"></script>    
+</head>
+<body>
+         <div id="header">
+            <h1>LoyaltyTool</h1>
+        </div>  
+
+    <div id="container">
+
+            <script>
+
+
+            treedataobj = JSON.parse(treedatastr); // parse DB JSON results to create object
+
+ 
+
+            /* GET CLUBS */
+            for (var i=0; i < treedataobj.clubs.length; i++){
+
+                writeClubs(i); 
+
+                /* GET RECOGNTIONS (CLUB) */
+                if (typeof treedataobj.clubs[i].club_recognitions !== "undefined"){
+                    /* GET RECOGNTION RULE (CLUB) */
+                    for(var j=0; j < treedataobj.clubs[i].club_recognitions.length; j++){
+                        writeClubRecognitions(i,j);
+                        if (typeof treedataobj.clubs[i].club_recognitions[j].rule !== "undefined"){
+                            writeClubRecognitionRule(i,j);
+                        }
+                    }
+                }
+
+                /* GET GROUPS */
+                for (var j=0; j < treedataobj.clubs[i].groups.length; j++){
+                    writeGroups(i,j);
+
+                    /* GET PARENT GROUP (GROUP) */
+                    if (typeof treedataobj.clubs[i].groups[j].parent_group !== "undefined"){
+                        writeParentGroup(i,j);
+                    }
+
+                    /* GET RULES (GROUP) */
+                    if (typeof treedataobj.clubs[i].groups[j].rules !== "undefined"){
+                        for (var k=0; k < treedataobj.clubs[i].groups[j].rules.length; k++){
+                            writeGroupRule(i,j);
+                        }
+                    }
+
+                    /* GET LEVEL (GROUP) */
+                    if (typeof treedataobj.clubs[i].groups[j].levels !== "undefined"){
+                        writeGroupLevel(i,j);
+                    }
+
+                    /* GET RECOGNTIONS (GROUP) */
+                    if (typeof treedataobj.clubs[i].groups[j].recognitions !== "undefined"){
+                        for (var k=0; k < treedataobj.clubs[i].groups[j].recognitions.length; k++){
+                            writeRecognitions(i,j,k);
+                            /* GET  RECOGNTION LEVEL (GROUP) */
+                            if (typeof treedataobj.clubs[i].groups[j].recognitions[k].levels !== "undefined"){
+                                writeRecognitionLevel(i,j,k)
+                            }
+                        }
+                    }
+
+                    /* GET MODEL (GROUP) */
+                    if (typeof treedataobj.clubs[i].groups[j].models !== "undefined"){
+                            writeGroupModel(i,j);
+                        /* GET MODEL RULES (GROUP) */
+                        for (var k=0; k < treedataobj.clubs[i].groups[j].models[0].model_rules.length; k++){
+                            writeGroupModelRules(i,j,k);
+                        }
+                    }
+                }
+
+                // if(club.nodeStructure.children[3].children.length > 0){
+                //     club.nodeStructure.children[3] = {text: {name: "Recognitions"}, collapsed: true, children: []};
+
+                // }
+                var my_chart = new Treant(club,$); // create SVG after pushing data
+
+            }
+
+            </script>
+    </div>
+</body>
+</html>
